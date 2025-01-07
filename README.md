@@ -1,15 +1,15 @@
 # MapMIT
 An integrated campus mapping and event management platform for MIT Manipal, combining interactive digital maps with real-time event visualization and automated drone mapping.
 ## Table of Contents
-- [Introduction](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#introduction)
-- [Project Components](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#project-components)
-- [Development Phases](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#development-phases)
-- [Technology Stack](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#technology-stack)
-- [Getting Started](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#getting-started)
-- [Usage](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#usage)
-- [Contributing](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#contributions)
-- [License](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#license)
-- [Acknowledgements](https://github.com/openhorizonrobotics/mapmit/blob/main/README.md#acknowledgements)
+- [Introduction](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#introduction)
+- [Project Components](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#project-components)
+- [Development Phases](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#development-phases)
+- [Technology Stack](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#technology-stack)
+- [Getting Started](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#getting-started)
+- [Usage](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#usage)
+- [Contributing](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#contributions)
+- [License](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#license)
+- [Acknowledgements](https://github.com/openhorizonrobotics/mapmit/blob/documentation-update/README.md#acknowledgements)
 
 ## Introduction
 MapMIT aims to improve campus navigation and event discovery through a comprehensive platform that integrates:
@@ -112,5 +112,5 @@ Contributions are welcome! Please follow these steps:
 This project is licensed under GNU Affero General Public License v3.0 - refer the [License file](https://github.com/openhorizonrobotics/mapmit/blob/main/LICENSE)
 ## Acknowledgements  
 Thanks to the QGIS community for their excellent GIS software.  
-Special thanks to the Department of Instrumentation and Control Engineering (ICE) and Innovation Centre, MIT Manipal for supporting the project.
+Special thanks to the Department of Instrumentation and Control Engineering (ICE) and Innovation Centre, MIT Manipal for supporting the project.  
 Inspired by interactive maps from other universities.
