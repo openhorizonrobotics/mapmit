@@ -78,10 +78,9 @@ and more in planning phase...
 4. Data Formats: Shapefiles, GeoJSON for data handling. (refer static map readme)
 5. Database: PostgreSQL with PostGIS
 ### Hardware
-1. Flight Control: TBA
-2. Photogrammetry: TBA
-3. Data Processing: TBA
-4. GPS Navigation: TBA
+1. Drone: F4 Flight Controller, BLDC Motor, M8 GPS 
+2. Photogrammetry: Meshroom for 3D model reconstruction, Cleanup in Blender
+3. Data Acquisition: FireHawk 4K Camera
 
 ## Getting Started  
 ### Prerequisites:-  
