@@ -97,6 +97,59 @@ cd mapmit
 ### Set up QGIS:  
 Open QGIS and import the Geopackage along with all attached files from the `qgis project` directory.  
 
+# Setting Up Local Development Environment
+
+
+If you are facing CORS issues when loading .geojson files directly from your file system, it is because modern browsers block file:// protocol requests due to security restrictions. This guide provides solutions to run a local server and fix the issue.
+
+## 1. Running a Local Server
+
+Instead of opening index.html directly, you need to serve your project through a local web server. Below are different ways to set up a local server.
+
+Using Python HTTP Server
+
+If you have Python installed, you can start a simple HTTP server.
+
+### For Python 3:
+```
+python -m http.server 8000
+```
+### For Python 2:
+```
+python -m SimpleHTTPServer 8000
+```
+Open http://localhost:8000 in your browser.
+
+## Using Node.js HTTP Server
+
+If you have Node.js installed, you can use http-server to serve files.
+
+Install http-server globally:
+```
+npm install -g http-server
+```
+Start the server in your project directory:
+```
+http-server .
+```
+Open http://localhost:8080 in your browser.
+
+## Using Live Server in VS Code
+
+If you are using VS Code, the Live Server extension provides an easy way to run a local server.
+Install Live Server from the VS Code extensions marketplace.
+Right-click index.html → Open with Live Server.
+Your browser should open automatically at http://127.0.0.1:5500.
+
+Open your project in the browser using http://localhost:8000 (or the respective port based on the method used).
+Check if .geojson files load correctly without CORS errors.
+
+## 3. Troubleshooting
+
+If the server doesn't start, ensure Python/Node.js is installed correctly.
+Try a different port if 8000 or 8080 is occupied (python -m http.server 9000).
+Clear your browser cache or use an incognito window if issues persist.
+
 ## Usage
 (Instructions to be added as the project progresses.)
 
