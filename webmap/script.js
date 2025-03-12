@@ -404,6 +404,14 @@ function startPositionTracking() {
         fitMapToFeatures();
     });
 }
+document.getElementById("start-tracking-btn").addEventListener("click", function () {
+    startPositionTracking();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Your existing code here
+    startPositionTracking();  // Ensure this runs only after user interaction
+});
 
 // Show warning when user is far from the mapped area
 function showLocationWarning() {
@@ -487,8 +495,7 @@ trackingButton.addEventListener('click', () => {
     }
 });
 
-// Start tracking when map is loaded
-startPositionTracking();
+
 
 // Fit Map to Features
 function fitMapToFeatures() {
@@ -600,9 +607,7 @@ document.getElementById('closeLegend').addEventListener('click', () => {
     legendPanel.classList.remove('active');
 });
 
-document.getElementById('closePopup').addEventListener('click', () => {
-    locationPopup.classList.remove('active');
-});
+
 
 // Zoom Controls
 document.getElementById('zoomIn').addEventListener('click', (event) => {

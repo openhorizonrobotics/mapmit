@@ -23,6 +23,8 @@
                         <i class="fas fa-list"></i>
                         Legend
                     </button>
+                    <button id="start-tracking-btn">Enable Location</button>
+
                     <button id="centerMap" class="nav-button">
                         <i class="fas fa-crosshairs"></i>
                         Center
@@ -35,6 +37,7 @@
                         <i class="fas fa-location-arrow"></i>
                         Tracking
                     </button>
+                    
                 </div>
             </div>
         </nav>
@@ -147,20 +150,7 @@
         </div>
 
         <!-- Location Info Sidebar -->
-        <div class="location-sidebar" id="locationPopup">
-            <div class="sidebar-header">
-                <h3 id="popupTitle">Location Name</h3>
-                <button class="close-button" id="closePopup">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="sidebar-content">
-                <p id="popupDescription">Location description goes here.</p>
-            </div>
-            <div class="sidebar-footer">
-                <span class="sidebar-timestamp" id="popupTimestamp"></span>
-            </div>
-        </div>
+        
     </div>
     <script src="script.js"></script>
 </body>
