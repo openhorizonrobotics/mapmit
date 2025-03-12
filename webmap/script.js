@@ -211,8 +211,7 @@ function createLabeledStyle(feature, baseStyle) {
         text.setText(nameNum);
     } else if (name) {
         text.setText(name);
-    } else if (number) {
-        text.setText(number);
+
     } else {
         return baseStyle;
     }
