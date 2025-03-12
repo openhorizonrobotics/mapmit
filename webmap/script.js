@@ -39,11 +39,33 @@ const styles = {
     mess: createStyle('rgba(255, 0, 0, 0.2)', 'rgba(255, 0, 0, 1)'),
     parking: createStyle('rgba(128, 128, 128, 0.2)', 'rgba(128, 128, 128, 1)'),
     sports: createStyle('rgba(147, 112, 219, 0.2)', 'rgba(147, 112, 219, 1)'),
+    shops: createStyle('rgba(255, 140, 0, 0.2)', 'rgba(255, 140, 0, 1)'),
     temple: createStyle('rgba(139, 69, 19, 0.2)', 'rgba(139, 69, 19, 1)'),
     walkways: new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: '#8B4513',
             width: 2
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
         })
     }),
     circles: createStyle('rgba(169, 169, 169, 0.2)', 'rgba(169, 169, 169, 1)'),
@@ -53,6 +75,27 @@ const styles = {
             width: 3,
             lineCap: 'round',
             lineJoin: 'round'
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
         })
     }),
     roads_second: new ol.style.Style({
@@ -61,6 +104,27 @@ const styles = {
             width: 2,
             lineCap: 'round',
             lineJoin: 'round'
+        }),
+        text: new ol.style.Text({
+            font: '12px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
         })
     }),
     under_construction: new ol.style.Style({
@@ -71,6 +135,26 @@ const styles = {
             color: '#FFD700',
             width: 2,
             lineDash: [10, 10]
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle'
         })
     }),
     tree: new ol.style.Style({
@@ -85,15 +169,59 @@ const styles = {
 
 // Function to create style with label
 function createLabeledStyle(feature, baseStyle) {
+    const shops = feature.get('Shops');
+    const sports = feature.get('Sports');
+    const nameNum = feature.get('Name/Num');
     const name = feature.get('Name');
-    if (!name) return baseStyle;
-
+    const number = feature.get('Number');
     const style = baseStyle.clone();
-    const text = style.getText();
-    text.setText(name);
     
-    // Add placement options for better label positioning
-    text.setPlacement('point');
+    // Create text style if it doesn't exist
+    let text = style.getText();
+    if (!text) {
+        text = new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -15,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle'
+        });
+        style.setText(text);
+    }
+    
+    // Prioritize Shops and Sports properties, then Name/Num, then Name, finally Number for roads
+    if (shops) {
+        text.setText(shops);
+    } else if (sports) {
+        text.setText(sports);
+    } else if (nameNum) {
+        text.setText(nameNum);
+    } else if (name) {
+        text.setText(name);
+    } else if (number) {
+        text.setText(number);
+    } else {
+        return baseStyle;
+    }
+    
+    // Preserve line placement for roads, use point placement for others
+    const featureType = feature.get('type') || '';
+    if (!featureType.includes('road') && !featureType.includes('walkway')) {
+        text.setPlacement('point');
+    }
     text.setOverflow(true);
     
     return style;
@@ -160,6 +288,7 @@ const layerConfigs = {
     mess: { url: 'datav2/Mess.geojson', style: styles.mess },
     parking: { url: 'datav2/Parking.geojson', style: styles.parking },
     sports: { url: 'datav2/Sports.geojson', style: styles.sports },
+    shops: { url: 'datav2/Shops.geojson', style: styles.shops },
     temple: { url: 'datav2/temple.geojson', style: styles.temple },
     tree: { url: 'datav2/Trees.geojson', style: styles.tree },
     walkways: { url: 'datav2/walkways.geojson', style: styles.walkways },
