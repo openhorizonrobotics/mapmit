@@ -404,14 +404,9 @@ function startPositionTracking() {
         fitMapToFeatures();
     });
 }
-document.getElementById("start-tracking-btn").addEventListener("click", function () {
-    startPositionTracking();
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Your existing code here
-    startPositionTracking();  // Ensure this runs only after user interaction
-});
+
+
 
 // Show warning when user is far from the mapped area
 function showLocationWarning() {
