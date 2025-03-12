@@ -75,7 +75,7 @@ const styles = {
 
 // Function to create style with label
 function createLabeledStyle(feature, baseStyle) {
-    const name = feature.get('name');
+    const name = feature.get('Name');
     if (!name) return baseStyle;
 
     const style = baseStyle.clone();
