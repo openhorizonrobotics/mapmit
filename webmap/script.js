@@ -83,7 +83,7 @@ function createLabeledStyle(feature, baseStyle) {
     return style;
 }
 
-// Initialize Map
+// Initialize Map with Scale Bar
 const map = new ol.Map({
     target: 'map',
     layers: [],
@@ -92,8 +92,13 @@ const map = new ol.Map({
         zoom: 17,
         minZoom: 16,
         maxZoom: 19,
-        constrainRotation: true,
-    })
+        constrainRotation: true
+    }),
+    controls: [
+        new ol.control.ScaleLine({
+            units: 'metric' // Use meters/kilometers
+        })
+    ]
 });
 
 // Vector Sources Array and Layers Object
@@ -170,14 +175,24 @@ function fitMapToFeatures() {
                 loadedSources++;
                 
                 if (loadedSources === vectorSources.length) {
-                    map.getView().fit(extent, {
+                    const view = map.getView();
+                    view.fit(extent, {
                         padding: [50, 50, 50, 50],
-                        maxZoom: 19
+                        maxZoom: 19,
+                        duration: 0 // Instant fit
                     });
+                    map.render(); // Force render after fit
                 }
             }
         });
     });
+
+    // Fallback: render after a short delay if sources don’t load
+    setTimeout(() => {
+        if (loadedSources === 0) {
+            map.render();
+        }
+    }, 500);
 }
 
 // UI Controls
@@ -207,6 +222,25 @@ document.getElementById('closeLegend').addEventListener('click', () => {
 
 document.getElementById('closePopup').addEventListener('click', () => {
     locationPopup.classList.remove('active');
+});
+
+// Zoom Controls
+document.getElementById('zoomIn').addEventListener('click', (event) => {
+    event.stopPropagation();
+    const view = map.getView();
+    const currentZoom = view.getZoom();
+    if (currentZoom < 19) {
+        view.animate({ zoom: currentZoom + 1, duration: 150 });
+    }
+});
+
+document.getElementById('zoomOut').addEventListener('click', (event) => {
+    event.stopPropagation();
+    const view = map.getView();
+    const currentZoom = view.getZoom();
+    if (currentZoom > 16) {
+        view.animate({ zoom: currentZoom - 1, duration: 150 });
+    }
 });
 
 // Center Map Button
@@ -265,7 +299,7 @@ searchInput.addEventListener('input', (e) => {
     });
 });
 
-// Show Feature Popup
+// Show Feature Popup (Updated to use sidebar)
 function showFeaturePopup(feature) {
     const name = feature.get('name') || 'Unnamed Location';
     const description = feature.get('description') || 'No description available';
@@ -274,34 +308,10 @@ function showFeaturePopup(feature) {
     popupDescription.textContent = description;
     popupTimestamp.textContent = new Date().toLocaleTimeString();
 
-    const extent = feature.getGeometry().getExtent();
-    const center = ol.extent.getCenter(extent);
-    const pixel = map.getPixelFromCoordinate(center);
-
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-    const popupHeight = locationPopup.offsetHeight;
-    const popupWidth = locationPopup.offsetWidth;
-
-    const spaceAbove = pixel[1];
-    const spaceBelow = viewportHeight - pixel[1];
-
-    let left = pixel[0] - (popupWidth / 2);
-    left = Math.max(10, Math.min(left, viewportWidth - popupWidth - 10));
-
-    let top;
-    if (spaceAbove > popupHeight + 20 || spaceAbove > spaceBelow) {
-        top = pixel[1] - popupHeight - 20;
-    } else {
-        top = pixel[1] + 20;
-    }
-
-    locationPopup.style.left = `${left}px`;
-    locationPopup.style.top = `${top}px`;
     locationPopup.classList.add('active');
 }
 
-// Map Click Handler
+// Map Click Handler (Updated)
 map.on('click', function(event) {
     const feature = map.forEachFeatureAtPixel(event.pixel, function(feature) {
         return feature;

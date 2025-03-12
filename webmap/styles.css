@@ -1,10 +1,7 @@
 :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #2c3e50;
-    --accent-color: #e74c3c;
-    --background-color: #ecf0f1;
-    --text-color: #2c3e50;
-    --popup-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --green: #95e246;
+    --black: #000000;
+    --white: #ffffff;
     --transition-speed: 0.3s;
 }
 
@@ -20,7 +17,7 @@
     height: 100vh;
     overflow: hidden;
     position: relative;
-    background: var(--background-color);
+    background: var(--white);
 }
 
 /* Top Navigation */
@@ -29,9 +26,8 @@
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--black);
     padding: 10px 20px;
-    box-shadow: var(--popup-shadow);
     z-index: 1000;
 }
 
@@ -44,11 +40,9 @@
 }
 
 .nav-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2em;
-    color: var(--primary-color);
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--green);
 }
 
 .nav-controls {
@@ -60,18 +54,18 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 8px 15px;
-    border: none;
+    padding: 10px 20px;
+    border: 1px solid var(--green);
     border-radius: 4px;
-    background: var(--primary-color);
-    color: white;
+    background: var(--green);
+    color: var(--black);
     cursor: pointer;
     transition: var(--transition-speed);
 }
 
 .nav-button:hover {
-    background: #357abd;
-    transform: translateY(-2px);
+    background: #7cc337;
+    color: var(--black);
 }
 
 /* Map Container */
@@ -93,9 +87,9 @@
     top: 80px;
     right: 20px;
     width: 300px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--popup-shadow);
+    background: var(--white);
+    border: 1px solid var(--black);
+    border-radius: 4px;
     padding: 15px;
     transform: translateX(120%);
     transition: transform var(--transition-speed);
@@ -109,7 +103,7 @@
 #searchInput {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--black);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -126,37 +120,39 @@
 }
 
 .search-result-item:hover {
-    background-color: #f5f5f5;
+    background-color: rgba(149, 226, 70, 0.1);
 }
 
 /* Legend Panel */
 .legend-panel {
     position: absolute;
-    top: 80px;
+    top: 150px;
     left: 20px;
     width: 250px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--popup-shadow);
+    background: var(--white);
+    border-radius: 8px; /* Softer corners */
+    padding: 20px; /* Plush padding */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Material UI elevation */
     transform: translateX(-120%);
-    transition: transform var(--transition-speed);
+    transition: transform var(--transition-speed), box-shadow 0.3s; /* Smooth transitions */
     z-index: 1000;
 }
 
 .legend-panel.active {
     transform: translateX(0);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Elevated when active */
 }
 
 .legend-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+    padding: 15px 0; /* Adjusted padding */
+    border-bottom: none; /* Remove border */
 }
 
 .legend-content {
-    padding: 15px;
+    padding: 20px 0; /* Plush padding */
     max-height: 70vh;
     overflow-y: auto;
 }
@@ -177,52 +173,51 @@
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--black);
 }
 
-/* Location Info Popup */
-.location-popup {
+/* Location Info Sidebar */
+.location-sidebar {
     position: absolute;
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--popup-shadow);
+    top: 80px;
+    right: 20px;
     width: 300px;
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-    transition: all var(--transition-speed);
-    pointer-events: none;
+    background: var(--white);
+    border-radius: 8px; /* Softer corners */
+    padding: 20px; /* Plush padding */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Material UI elevation */
+    transform: translateX(120%);
+    transition: transform var(--transition-speed), box-shadow 0.3s; /* Smooth transitions */
     z-index: 1000;
 }
 
-.location-popup.active {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: all;
+.location-sidebar.active {
+    transform: translateX(0);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Elevated when active */
 }
 
-.popup-header {
+.sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    background: var(--primary-color);
-    color: white;
-    border-radius: 8px 8px 0 0;
+    padding: 15px 0; /* Adjusted padding */
+    border-bottom: none; /* Remove border */
+    background: var(--white);
+    color: var(--black);
 }
 
-.popup-content {
-    padding: 15px;
+.sidebar-content {
+    padding: 20px 0; /* Plush padding */
+    color: var(--black);
 }
 
-.popup-footer {
-    padding: 10px 15px;
-    background: #f8f9fa;
-    border-radius: 0 0 8px 8px;
+.sidebar-footer {
+    padding: 15px 0; /* Adjusted padding */
+    background: rgba(149, 226, 70, 0.15); /* Slightly stronger tint */
+    border-radius: 0 0 8px 8px; /* Match container */
     font-size: 0.9em;
-    color: #666;
+    color: var(--black);
 }
-
 /* Mini Stats */
 .mini-stats {
     position: absolute;
@@ -230,27 +225,43 @@
     right: 20px;
     display: flex;
     gap: 15px;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--white);
     padding: 10px 15px;
-    border-radius: 8px;
-    box-shadow: var(--popup-shadow);
+    border: 1px solid var(--black);
+    border-radius: 4px;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
     gap: 5px;
+    color: var(--black);
 }
 
 /* Map Labels */
 .map-label {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--white);
     padding: 2px 6px;
     border-radius: 3px;
     font-size: 12px;
     white-space: nowrap;
     pointer-events: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--black);
+}
+
+/* Close Button */
+.close-button {
+    background: var(--green);
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: var(--black);
+    transition: var(--transition-speed);
+}
+
+.close-button:hover {
+    background: #7cc337;
 }
 
 /* Legend Colors */
@@ -269,4 +280,92 @@
 .legend-color.under-construction { 
     background-color: rgba(255, 255, 0, 0.2);
     border: 2px dashed #FFD700;
+}
+
+/* Scale Bar */
+.ol-scale-line {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: var(--white);
+    border: 1px solid var(--black);
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: var(--black);
+    font-size: 12px;
+    z-index: 1000;
+}
+
+.ol-scale-line-inner {
+    border: 2px solid var(--green);
+    border-top: none;
+    color: var(--black);
+}
+/* North Arrow */
+.north-arrow {
+    position: absolute;
+    top: 80px; /* Below the header (60px height + 20px gap) */
+    left: 20px; /* Bottom-left corner */
+    width: 50px; /* Slightly larger for clarity */
+    height: 50px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Stack arrow and "N" vertically */
+    align-items: center;
+    justify-content: center;
+    font-size: 18px; /* Arrow size */
+    color: var(--green);
+    z-index: 1000;
+    transition: box-shadow 0.3s;
+}
+
+.north-arrow::after {
+    content: "N"; /* Add "N" label */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px; /* Smaller "N" */
+    font-weight: bold;
+    color: var(--green);
+    margin-top: 2px; /* Space between arrow and "N" */
+}
+
+.north-arrow:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    position: absolute;
+    bottom: 20px; /* Bottom-right corner */
+    right: 20px;
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between buttons */
+    z-index: 1000;
+}
+
+.zoom-button {
+    width: 40px; /* Same size as north arrow */
+    height: 40px;
+    background: var(--white);
+    border-radius: 50%; /* Circular shape */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Material UI elevation */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px; /* Icon size */
+    color: var(--green); /* Green icon */
+    border: none; /* No border */
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+.zoom-button:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Elevated on hover */
+    transform: scale(1.05); /* Slight scale-up for feedback */
+}
+
+.zoom-button:active {
+    transform: scale(0.95); /* Slight press effect */
 }
