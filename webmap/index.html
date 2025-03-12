@@ -152,5 +152,16 @@
         
     </div>
     <script src="script.js"></script>
+    <script>
+        searchPanel.style.display = 'none';
+        document.getElementById('toggleSearch').addEventListener('click', () => {
+        const searchPanel = document.getElementById('searchPanel');
+        if (searchPanel.style.display === 'none' || searchPanel.style.display === '') {
+            searchPanel.style.display = 'block'; // Show the search panel
+        } else {
+            searchPanel.style.display = 'none'; // Hide the search panel
+        }
+    });
+    </script>
 </body>
 </html>
