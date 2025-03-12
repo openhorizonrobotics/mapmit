@@ -137,7 +137,7 @@ function addGeoJSONLayer(url, style, id) {
 
 // Add Layers
 const layerConfigs = {
-    academic: { url: 'data/Academic Blocks.geojson', style: styles.academic },
+    academic: { url: 'data/Academic_Blocks.geojson', style: styles.academic },
     grass: { url: 'data/Grasscover.geojson', style: styles.grass },
     hostel: { url: 'data/Hostels.geojson', style: styles.hostel },
     mess: { url: 'data/Mess.geojson', style: styles.mess },
