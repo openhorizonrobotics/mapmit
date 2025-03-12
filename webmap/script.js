@@ -9,14 +9,24 @@ const createStyle = (color, strokeColor, strokeWidth = 2) => {
             width: strokeWidth
         }),
         text: new ol.style.Text({
-            font: '12px Calibri,sans-serif',
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
             fill: new ol.style.Fill({ color: '#000' }),
             stroke: new ol.style.Stroke({
                 color: '#fff',
-                width: 3
+                width: 4
             }),
             overflow: true,
-            offsetY: -15
+            offsetY: -15,
+            padding: [5, 5, 5, 5],
+            backgroundFill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.8)'
+            }),
+            backgroundStroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.2)',
+                width: 1
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle'
         })
     });
 };
@@ -79,7 +89,13 @@ function createLabeledStyle(feature, baseStyle) {
     if (!name) return baseStyle;
 
     const style = baseStyle.clone();
-    style.getText().setText(name);
+    const text = style.getText();
+    text.setText(name);
+    
+    // Add placement options for better label positioning
+    text.setPlacement('point');
+    text.setOverflow(true);
+    
     return style;
 }
 
@@ -118,7 +134,8 @@ function addGeoJSONLayer(url, style, id) {
         source: vectorSource,
         style: function(feature) {
             return createLabeledStyle(feature, style);
-        }
+        },
+        declutter: true // Enable label collision detection
     });
 
     layers[id] = vectorLayer;
@@ -536,7 +553,7 @@ searchInput.addEventListener('input', (e) => {
 
 // Show Feature Popup (Updated to use sidebar)
 function showFeaturePopup(feature) {
-    const name = feature.get('name') || 'Unnamed Location';
+    const name = feature.get('Name') || 'Unnamed Location';
     const description = feature.get('description') || 'No description available';
 
     popupTitle.textContent = name;
