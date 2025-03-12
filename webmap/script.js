@@ -18,13 +18,7 @@ const createStyle = (color, strokeColor, strokeWidth = 2) => {
             overflow: true,
             offsetY: -15,
             padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
+
             textAlign: 'center',
             textBaseline: 'middle'
         })
@@ -56,20 +50,14 @@ const styles = {
             overflow: true,
             offsetY: -10,
             padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
             textAlign: 'center',
             textBaseline: 'middle',
             placement: 'line'
         })
     }),
     circles: createStyle('rgba(169, 169, 169, 0.2)', 'rgba(169, 169, 169, 1)'),
-    roads_main: new ol.style.Style({
+    roads_main: new ol.style.Style
+    ({
         stroke: new ol.style.Stroke({
             color: '#333333',
             width: 3,
@@ -86,13 +74,6 @@ const styles = {
             overflow: true,
             offsetY: -10,
             padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
             textAlign: 'center',
             textBaseline: 'middle',
             placement: 'line'
@@ -105,27 +86,7 @@ const styles = {
             lineCap: 'round',
             lineJoin: 'round'
         }),
-        text: new ol.style.Text({
-            font: '12px "Open Sans", "Arial Unicode MS", sans-serif',
-            fill: new ol.style.Fill({ color: '#000' }),
-            stroke: new ol.style.Stroke({
-                color: '#fff',
-                width: 4
-            }),
-            overflow: true,
-            offsetY: -10,
-            padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
-            textAlign: 'center',
-            textBaseline: 'middle',
-            placement: 'line'
-        })
+
     }),
     under_construction: new ol.style.Style({
         fill: new ol.style.Fill({
@@ -146,13 +107,6 @@ const styles = {
             overflow: true,
             offsetY: -10,
             padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
             textAlign: 'center',
             textBaseline: 'middle'
         })
@@ -173,7 +127,7 @@ function createLabeledStyle(feature, baseStyle) {
     const sports = feature.get('Sports');
     const nameNum = feature.get('Name/Num');
     const name = feature.get('Name');
-    const number = feature.get('Number');
+
     const style = baseStyle.clone();
     
     // Create text style if it doesn't exist
@@ -181,28 +135,13 @@ function createLabeledStyle(feature, baseStyle) {
     if (!text) {
         text = new ol.style.Text({
             font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
-            fill: new ol.style.Fill({ color: '#000' }),
-            stroke: new ol.style.Stroke({
-                color: '#fff',
-                width: 4
-            }),
-            overflow: true,
-            offsetY: -15,
-            padding: [5, 5, 5, 5],
-            backgroundFill: new ol.style.Fill({
-                color: 'rgba(255, 255, 255, 0.8)'
-            }),
-            backgroundStroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 0, 0.2)',
-                width: 1
-            }),
             textAlign: 'center',
             textBaseline: 'middle'
         });
         style.setText(text);
     }
     
-    // Prioritize Shops and Sports properties, then Name/Num, then Name, finally Number for roads
+    // Prioritize Shops and Sports properties, then Name/Num
     if (shops) {
         text.setText(shops);
     } else if (sports) {

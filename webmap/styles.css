@@ -305,17 +305,6 @@ html, body {
     color: var(--black);
 }
 
-/* Map Labels */
-.map-label {
-    background-color: var(--white);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    pointer-events: none;
-    border: 1px solid var(--black);
-}
-
 /* Close Button */
 .close-button {
     background: var(--green);
