@@ -3,6 +3,7 @@
     --black: #000000;
     --white: #ffffff;
     --transition-speed: 0.3s;
+    --light-gray: #f0f0f0;
 }
 
 * {
@@ -345,27 +346,75 @@
     z-index: 1000;
 }
 
-.zoom-button {
-    width: 40px; /* Same size as north arrow */
+.zoom-button, .rotate-button {
+    width: 40px;
     height: 40px;
+    border-radius: 50%;
     background: var(--white);
-    border-radius: 50%; /* Circular shape */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Material UI elevation */
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px; /* Icon size */
-    color: var(--green); /* Green icon */
-    border: none; /* No border */
     cursor: pointer;
-    transition: box-shadow 0.3s, transform 0.2s; /* Smooth transitions */
+    font-size: 16px;
+    color: var(--black);
+    transition: var(--transition-speed);
 }
 
-.zoom-button:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Elevated on hover */
-    transform: scale(1.05); /* Slight scale-up for feedback */
+.zoom-button:hover, .rotate-button:hover {
+    background: var(--green);
+    color: var(--black);
 }
 
-.zoom-button:active {
-    transform: scale(0.95); /* Slight press effect */
+.rotate-button {
+    margin-top: 10px;
+}
+
+.rotate-left {
+    order: 3;
+}
+
+.rotate-right {
+    order: 4;
+}
+
+.reset-rotation {
+    order: 5;
+}
+
+/* Map Controls */
+.map-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.control-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--white);
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--black);
+    transition: var(--transition-speed);
+}
+
+.control-button:hover {
+    background: var(--light-gray);
+    transform: scale(1.05);
+}
+
+.control-button:active {
+    transform: scale(0.95);
 }
