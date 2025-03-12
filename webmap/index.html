@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
 </head>
 <body>
-    <div class="game-container">
+    <div class="map-container">
         <!-- Top Navigation Bar -->
         <nav class="top-nav">
             <div class="nav-content">
@@ -31,128 +31,132 @@
                         <i class="fas fa-search"></i>
                         Search
                     </button>
+                    <button id="toggleTracking" class="nav-button">
+                        <i class="fas fa-location-arrow"></i>
+                        Tracking
+                    </button>
                 </div>
             </div>
         </nav>
 
-<!-- Main Map Container -->
-<div class="map-container">
-    <div id="map" class="map"></div>
-    
-    <!-- North Arrow -->
-    <div id="northArrow" class="north-arrow">
-        <i class="fas fa-arrow-up"></i>
-    </div>
-    
-    <!-- Search Panel -->
-    <div class="search-panel" id="searchPanel">
-        <input type="text" placeholder="Search locations..." id="searchInput">
-        <div class="search-results" id="searchResults"></div>
-    </div>
+        <div class="game-container">
+            <!-- Main Map Container -->
+            <div id="map" class="map">
+                <!-- North Arrow -->
+                <div id="northArrow" class="north-arrow">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                
+                <!-- Zoom and Rotation Controls -->
+                <div class="map-controls">
+                    <button id="zoomIn" class="control-button" title="Zoom In"><i class="fas fa-plus"></i></button>
+                    <button id="zoomOut" class="control-button" title="Zoom Out"><i class="fas fa-minus"></i></button>
+                    <button id="rotateLeft" class="control-button" title="Rotate Left"><i class="fas fa-undo"></i></button>
+                    <button id="rotateRight" class="control-button" title="Rotate Right"><i class="fas fa-redo"></i></button>
+                    <button id="resetRotation" class="control-button" title="Reset Rotation"><i class="fas fa-compass"></i></button>
+                </div>
+            </div>
+        </div>
 
-    <!-- Legend Panel -->
-    <div class="legend-panel" id="legendPanel">
-        <div class="legend-header">
-            <h3>Map Legend</h3>
-            <button class="close-button" id="closeLegend">
-                <i class="fas fa-times"></i>
-            </button>
+        <!-- Search Panel -->
+        <div class="search-panel" id="searchPanel">
+            <input type="text" placeholder="Search locations..." id="searchInput">
+            <div class="search-results" id="searchResults"></div>
         </div>
-        <div class="legend-content">
-            <div class="legend-item">
-                <input type="checkbox" id="academic-toggle" checked>
-                <span class="legend-color academic"></span>
-                <span>Academic Buildings</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="hostel-toggle" checked>
-                <span class="legend-color hostel"></span>
-                <span>Hostels</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="mess-toggle" checked>
-                <span class="legend-color mess"></span>
-                <span>Mess/Cafeteria</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="sports-toggle" checked>
-                <span class="legend-color sports"></span>
-                <span>Sports Facilities</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="parking-toggle" checked>
-                <span class="legend-color parking"></span>
-                <span>Parking Areas</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="grass-toggle" checked>
-                <span class="legend-color grass"></span>
-                <span>Green Areas</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="temple-toggle" checked>
-                <span class="legend-color temple"></span>
-                <span>Temple</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="tree-toggle" checked>
-                <span class="legend-color tree"></span>
-                <span>Trees</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="walkways-toggle" checked>
-                <span class="legend-color walkways"></span>
-                <span>Walkways</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="circles-toggle" checked>
-                <span class="legend-color circles"></span>
-                <span>Circles</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="roads-main-toggle" checked>
-                <span class="legend-color roads-main"></span>
-                <span>Main Roads</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="roads-second-toggle" checked>
-                <span class="legend-color roads-second"></span>
-                <span>Secondary Roads</span>
-            </div>
-            <div class="legend-item">
-                <input type="checkbox" id="under-construction-toggle" checked>
-                <span class="legend-color under-construction"></span>
-                <span>Under Construction</span>
-            </div>
-        </div>
-    </div>
 
-    <!-- Location Info Sidebar -->
-    <div class="location-sidebar" id="locationPopup">
-        <div class="sidebar-header">
-            <h3 id="popupTitle">Location Name</h3>
-            <button class="close-button" id="closePopup">
-                <i class="fas fa-times"></i>
-            </button>
+        <!-- Legend Panel -->
+        <div class="legend-panel" id="legendPanel">
+            <div class="legend-header">
+                <h3>Map Legend</h3>
+                <button class="close-button" id="closeLegend">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="legend-content">
+                <div class="legend-item">
+                    <input type="checkbox" id="academic-toggle" checked>
+                    <span class="legend-color academic"></span>
+                    <span>Academic Buildings</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="hostel-toggle" checked>
+                    <span class="legend-color hostel"></span>
+                    <span>Hostels</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="mess-toggle" checked>
+                    <span class="legend-color mess"></span>
+                    <span>Mess/Cafeteria</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="sports-toggle" checked>
+                    <span class="legend-color sports"></span>
+                    <span>Sports Facilities</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="parking-toggle" checked>
+                    <span class="legend-color parking"></span>
+                    <span>Parking Areas</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="grass-toggle" checked>
+                    <span class="legend-color grass"></span>
+                    <span>Green Areas</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="temple-toggle" checked>
+                    <span class="legend-color temple"></span>
+                    <span>Temple</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="tree-toggle" checked>
+                    <span class="legend-color tree"></span>
+                    <span>Trees</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="walkways-toggle" checked>
+                    <span class="legend-color walkways"></span>
+                    <span>Walkways</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="circles-toggle" checked>
+                    <span class="legend-color circles"></span>
+                    <span>Circles</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="roads-main-toggle" checked>
+                    <span class="legend-color roads-main"></span>
+                    <span>Main Roads</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="roads-second-toggle" checked>
+                    <span class="legend-color roads-second"></span>
+                    <span>Secondary Roads</span>
+                </div>
+                <div class="legend-item">
+                    <input type="checkbox" id="under-construction-toggle" checked>
+                    <span class="legend-color under-construction"></span>
+                    <span>Under Construction</span>
+                </div>
+            </div>
         </div>
-        <div class="sidebar-content">
-            <p id="popupDescription">Location description goes here.</p>
-        </div>
-        <div class="sidebar-footer">
-            <span class="sidebar-timestamp" id="popupTimestamp"></span>
+
+        <!-- Location Info Sidebar -->
+        <div class="location-sidebar" id="locationPopup">
+            <div class="sidebar-header">
+                <h3 id="popupTitle">Location Name</h3>
+                <button class="close-button" id="closePopup">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <p id="popupDescription">Location description goes here.</p>
+            </div>
+            <div class="sidebar-footer">
+                <span class="sidebar-timestamp" id="popupTimestamp"></span>
+            </div>
         </div>
     </div>
-</div>
-<!-- Zoom Buttons -->
-<div class="zoom-controls">
-    <button id="zoomIn" class="zoom-button">
-        <i class="fas fa-plus"></i>
-    </button>
-    <button id="zoomOut" class="zoom-button">
-        <i class="fas fa-minus"></i>
-    </button>
-</div>
-</div>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -92,7 +92,7 @@ const map = new ol.Map({
         zoom: 17,
         minZoom: 16,
         maxZoom: 19,
-        constrainRotation: true
+        constrainRotation: false // Allow map rotation
     }),
     controls: [
         new ol.control.ScaleLine({
@@ -157,6 +157,194 @@ Object.entries(layerConfigs).forEach(([id, config]) => {
     addGeoJSONLayer(config.url, config.style, id);
 });
 
+// User Position Tracking
+let userPositionSource = new ol.source.Vector();
+let userPositionLayer = new ol.layer.Vector({
+    source: userPositionSource,
+    style: new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 8,
+            fill: new ol.style.Fill({
+                color: 'rgb(188,20,20)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#322d2d',
+                width: 5
+            })
+        })
+    }),
+    zIndex: 1000 // Make sure user position is on top of other layers
+});
+
+// Add user position layer to map
+map.addLayer(userPositionLayer);
+
+// User position tracking feature
+let userPositionFeature = new ol.Feature();
+userPositionSource.addFeature(userPositionFeature);
+
+// Position accuracy feature (circle around the position point)
+let accuracyFeature = new ol.Feature();
+userPositionSource.addFeature(accuracyFeature);
+
+// Store the map extent for reference
+let mapExtent = null;
+
+// Geolocation API setup
+const geolocation = new ol.Geolocation({
+    trackingOptions: {
+        enableHighAccuracy: true
+    },
+    projection: map.getView().getProjection()
+});
+
+// Check if a position is within or near the map extent
+function isPositionNearMapExtent(coordinates) {
+    if (!mapExtent) return true; // If we don't have map extent yet, assume it's fine
+    
+    // Create a buffered extent (much larger than the actual map extent)
+    const buffer = 5000; // Increased buffer in meters (was 1000)
+    const bufferedExtent = [
+        mapExtent[0] - buffer,
+        mapExtent[1] - buffer,
+        mapExtent[2] + buffer,
+        mapExtent[3] + buffer
+    ];
+    
+    // Check if the position is within the buffered extent
+    return ol.extent.containsCoordinate(bufferedExtent, coordinates);
+}
+
+// Start tracking position
+function startPositionTracking() {
+    geolocation.setTracking(true);
+    
+    // Handle position change
+    geolocation.on('change:position', function() {
+        const coordinates = geolocation.getPosition();
+        if (coordinates) {
+            userPositionFeature.setGeometry(coordinates ? 
+                new ol.geom.Point(coordinates) : null);
+            
+            // Center map on user position if tracking is active
+            if (followUserPosition) {
+                if (isPositionNearMapExtent(coordinates)) {
+                    map.getView().animate({
+                        center: coordinates,
+                        duration: 500
+                    });
+                } else {
+                    // If user is far from map extent, show notification and disable following
+                    // but still keep the map visible
+                    showLocationWarning();
+                    followUserPosition = false;
+                    trackingButton.classList.remove('active');
+                    
+                    // Ensure map is still visible by fitting to features
+                    fitMapToFeatures();
+                }
+            }
+        }
+    });
+    
+    // Handle accuracy change
+    geolocation.on('change:accuracyGeometry', function() {
+        accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+    });
+    
+    // Handle error
+    geolocation.on('error', function(error) {
+        console.error('Geolocation error:', error);
+        // Don't show alert, just make sure map is visible
+        fitMapToFeatures();
+    });
+}
+
+// Show warning when user is far from the mapped area
+function showLocationWarning() {
+    // Create notification element if it doesn't exist
+    let notification = document.getElementById('location-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'location-notification';
+        notification.className = 'location-notification';
+        document.querySelector('.game-container').appendChild(notification);
+        
+        // Add styles for the notification if not already in CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            .location-notification {
+                position: absolute;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                z-index: 1001;
+                text-align: center;
+                max-width: 80%;
+                animation: fadeInOut 5s forwards;
+            }
+            @keyframes fadeInOut {
+                0% { opacity: 0; }
+                10% { opacity: 1; }
+                80% { opacity: 1; }
+                100% { opacity: 0; display: none; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    notification.textContent = 'You are far from the mapped area. Map view has been centered on the campus.';
+    notification.style.animation = 'none';
+    notification.offsetHeight; // Trigger reflow
+    notification.style.animation = 'fadeInOut 5s forwards';
+    
+    // Remove notification after animation completes
+    setTimeout(() => {
+        if (notification && notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 5000);
+}
+
+// Flag to determine if map should follow user position
+let followUserPosition = true;
+
+// Get the tracking and simulate location buttons
+const trackingButton = document.getElementById('toggleTracking');
+
+// Toggle position tracking
+trackingButton.addEventListener('click', () => {
+    followUserPosition = !followUserPosition;
+    trackingButton.classList.toggle('active');
+    
+    if (followUserPosition && geolocation.getPosition()) {
+        const coordinates = geolocation.getPosition();
+        if (isPositionNearMapExtent(coordinates)) {
+            map.getView().animate({
+                center: coordinates,
+                duration: 500
+            });
+        } else {
+            showLocationWarning();
+            followUserPosition = false;
+            trackingButton.classList.remove('active');
+            
+            // Ensure map is still visible by fitting to features
+            fitMapToFeatures();
+        }
+    } else {
+        // If tracking is disabled, ensure map is centered on features
+        fitMapToFeatures();
+    }
+});
+
+// Start tracking when map is loaded
+startPositionTracking();
+
 // Fit Map to Features
 function fitMapToFeatures() {
     let extent = null;
@@ -175,6 +363,9 @@ function fitMapToFeatures() {
                 loadedSources++;
                 
                 if (loadedSources === vectorSources.length) {
+                    // Store the map extent for reference
+                    mapExtent = extent;
+                    
                     const view = map.getView();
                     view.fit(extent, {
                         padding: [50, 50, 50, 50],
@@ -187,13 +378,57 @@ function fitMapToFeatures() {
         });
     });
 
-    // Fallback: render after a short delay if sources don’t load
+    // Fallback: render after a short delay if sources don't load
     setTimeout(() => {
         if (loadedSources === 0) {
             map.render();
         }
     }, 500);
 }
+
+// Function to initialize rotation controls
+function initRotationControls() {
+    // Get the north arrow element
+    const northArrow = document.getElementById('northArrow');
+    
+    // Update north arrow based on map rotation
+    function updateNorthArrow() {
+        const rotation = map.getView().getRotation();
+        const rotationDegrees = +rotation * 180 / Math.PI;
+        northArrow.style.transform = `rotate(${rotationDegrees}deg)`;
+    }
+
+    // Update arrow on map render
+    map.on('postrender', updateNorthArrow);
+
+    // Direct event listeners for rotation buttons
+    document.getElementById('rotateLeft').onclick = function() {
+        const view = map.getView();
+        view.animate({
+            rotation: view.getRotation() - Math.PI / 6,
+            duration: 250
+        });
+    };
+
+    document.getElementById('rotateRight').onclick = function() {
+        const view = map.getView();
+        view.animate({
+            rotation: view.getRotation() + Math.PI / 6,
+            duration: 250
+        });
+    };
+
+    document.getElementById('resetRotation').onclick = function() {
+        const view = map.getView();
+        view.animate({
+            rotation: 0,
+            duration: 250
+        });
+    };
+}
+
+// Initialize rotation controls after map is fully loaded
+map.once('postrender', initRotationControls);
 
 // UI Controls
 const legendPanel = document.getElementById('legendPanel');
