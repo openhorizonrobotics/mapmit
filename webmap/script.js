@@ -9,14 +9,18 @@ const createStyle = (color, strokeColor, strokeWidth = 2) => {
             width: strokeWidth
         }),
         text: new ol.style.Text({
-            font: '12px Calibri,sans-serif',
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
             fill: new ol.style.Fill({ color: '#000' }),
             stroke: new ol.style.Stroke({
                 color: '#fff',
-                width: 3
+                width: 4
             }),
             overflow: true,
-            offsetY: -15
+            offsetY: -15,
+            padding: [5, 5, 5, 5],
+
+            textAlign: 'center',
+            textBaseline: 'middle'
         })
     });
 };
@@ -29,20 +33,50 @@ const styles = {
     mess: createStyle('rgba(255, 0, 0, 0.2)', 'rgba(255, 0, 0, 1)'),
     parking: createStyle('rgba(128, 128, 128, 0.2)', 'rgba(128, 128, 128, 1)'),
     sports: createStyle('rgba(147, 112, 219, 0.2)', 'rgba(147, 112, 219, 1)'),
+    shops: createStyle('rgba(255, 140, 0, 0.2)', 'rgba(255, 140, 0, 1)'),
     temple: createStyle('rgba(139, 69, 19, 0.2)', 'rgba(139, 69, 19, 1)'),
     walkways: new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: '#8B4513',
             width: 2
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
         })
     }),
     circles: createStyle('rgba(169, 169, 169, 0.2)', 'rgba(169, 169, 169, 1)'),
-    roads_main: new ol.style.Style({
+    roads_main: new ol.style.Style
+    ({
         stroke: new ol.style.Stroke({
             color: '#333333',
             width: 3,
             lineCap: 'round',
             lineJoin: 'round'
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
         })
     }),
     roads_second: new ol.style.Style({
@@ -51,7 +85,8 @@ const styles = {
             width: 2,
             lineCap: 'round',
             lineJoin: 'round'
-        })
+        }),
+
     }),
     under_construction: new ol.style.Style({
         fill: new ol.style.Fill({
@@ -61,6 +96,19 @@ const styles = {
             color: '#FFD700',
             width: 2,
             lineDash: [10, 10]
+        }),
+        text: new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            fill: new ol.style.Fill({ color: '#000' }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 4
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [5, 5, 5, 5],
+            textAlign: 'center',
+            textBaseline: 'middle'
         })
     }),
     tree: new ol.style.Style({
@@ -75,11 +123,45 @@ const styles = {
 
 // Function to create style with label
 function createLabeledStyle(feature, baseStyle) {
-    const name = feature.get('name');
-    if (!name) return baseStyle;
+    const shops = feature.get('Shops');
+    const sports = feature.get('Sports');
+    const nameNum = feature.get('Name/Num');
+    const name = feature.get('Name');
 
     const style = baseStyle.clone();
-    style.getText().setText(name);
+    
+    // Create text style if it doesn't exist
+    let text = style.getText();
+    if (!text) {
+        text = new ol.style.Text({
+            font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
+            textAlign: 'center',
+            textBaseline: 'middle'
+        });
+        style.setText(text);
+    }
+    
+    // Prioritize Shops and Sports properties, then Name/Num
+    if (shops) {
+        text.setText(shops);
+    } else if (sports) {
+        text.setText(sports);
+    } else if (nameNum) {
+        text.setText(nameNum);
+    } else if (name) {
+        text.setText(name);
+
+    } else {
+        return baseStyle;
+    }
+    
+    // Preserve line placement for roads, use point placement for others
+    const featureType = feature.get('type') || '';
+    if (!featureType.includes('road') && !featureType.includes('walkway')) {
+        text.setPlacement('point');
+    }
+    text.setOverflow(true);
+    
     return style;
 }
 
@@ -118,7 +200,8 @@ function addGeoJSONLayer(url, style, id) {
         source: vectorSource,
         style: function(feature) {
             return createLabeledStyle(feature, style);
-        }
+        },
+        declutter: true // Enable label collision detection
     });
 
     layers[id] = vectorLayer;
@@ -143,6 +226,7 @@ const layerConfigs = {
     mess: { url: 'data/Mess.geojson', style: styles.mess },
     parking: { url: 'data/Parking.geojson', style: styles.parking },
     sports: { url: 'data/Sports.geojson', style: styles.sports },
+    shops: { url: 'data/Shops.geojson', style: styles.shops },
     temple: { url: 'data/temple.geojson', style: styles.temple },
     tree: { url: 'data/Trees.geojson', style: styles.tree },
     walkways: { url: 'data/walkways.geojson', style: styles.walkways },
@@ -260,6 +344,12 @@ function startPositionTracking() {
     });
 }
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Your existing code here
+    startPositionTracking();  // Ensure this runs only after user interaction
+});
+
 // Show warning when user is far from the mapped area
 function showLocationWarning() {
     // Create notification element if it doesn't exist
@@ -342,8 +432,7 @@ trackingButton.addEventListener('click', () => {
     }
 });
 
-// Start tracking when map is loaded
-startPositionTracking();
+
 
 // Fit Map to Features
 function fitMapToFeatures() {
@@ -455,9 +544,7 @@ document.getElementById('closeLegend').addEventListener('click', () => {
     legendPanel.classList.remove('active');
 });
 
-document.getElementById('closePopup').addEventListener('click', () => {
-    locationPopup.classList.remove('active');
-});
+
 
 // Zoom Controls
 document.getElementById('zoomIn').addEventListener('click', (event) => {
@@ -536,7 +623,7 @@ searchInput.addEventListener('input', (e) => {
 
 // Show Feature Popup (Updated to use sidebar)
 function showFeaturePopup(feature) {
-    const name = feature.get('name') || 'Unnamed Location';
+    const name = feature.get('Name') || 'Unnamed Location';
     const description = feature.get('description') || 'No description available';
 
     popupTitle.textContent = name;
