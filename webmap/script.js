@@ -220,20 +220,20 @@ function addGeoJSONLayer(url, style, id) {
 
 // Add Layers
 const layerConfigs = {
-    academic: { url: 'datav2/Academic_Blocks.geojson', style: styles.academic },
-    grass: { url: 'datav2/Grasscover.geojson', style: styles.grass },
-    hostel: { url: 'datav2/Hostels.geojson', style: styles.hostel },
-    mess: { url: 'datav2/Mess.geojson', style: styles.mess },
-    parking: { url: 'datav2/Parking.geojson', style: styles.parking },
-    sports: { url: 'datav2/Sports.geojson', style: styles.sports },
-    shops: { url: 'datav2/Shops.geojson', style: styles.shops },
-    temple: { url: 'datav2/temple.geojson', style: styles.temple },
-    tree: { url: 'datav2/Trees.geojson', style: styles.tree },
-    walkways: { url: 'datav2/walkways.geojson', style: styles.walkways },
-    circles: { url: 'datav2/circles.geojson', style: styles.circles },
-    roads_main: { url: 'datav2/roads_main.geojson', style: styles.roads_main },
-    roads_second: { url: 'datav2/roads_second.geojson', style: styles.roads_second },
-    under_construction: { url: 'datav2/Under_Construction.geojson', style: styles.under_construction }
+    academic: { url: 'data/Academic_Blocks.geojson', style: styles.academic },
+    grass: { url: 'data/Grasscover.geojson', style: styles.grass },
+    hostel: { url: 'data/Hostels.geojson', style: styles.hostel },
+    mess: { url: 'data/Mess.geojson', style: styles.mess },
+    parking: { url: 'data/Parking.geojson', style: styles.parking },
+    sports: { url: 'data/Sports.geojson', style: styles.sports },
+    shops: { url: 'data/Shops.geojson', style: styles.shops },
+    temple: { url: 'data/temple.geojson', style: styles.temple },
+    tree: { url: 'data/Trees.geojson', style: styles.tree },
+    walkways: { url: 'data/walkways.geojson', style: styles.walkways },
+    circles: { url: 'data/circles.geojson', style: styles.circles },
+    roads_main: { url: 'data/roads_main.geojson', style: styles.roads_main },
+    roads_second: { url: 'data/roads_second.geojson', style: styles.roads_second },
+    under_construction: { url: 'data/Under_Construction.geojson', style: styles.under_construction }
 };
 
 // Initialize layers
