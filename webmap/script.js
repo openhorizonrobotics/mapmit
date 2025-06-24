@@ -1,3 +1,6 @@
+//global variables
+let isDarkMode = false;
+
 // Map Styles with Labels
 const createStyle = (color, strokeColor, strokeWidth = 2) => {
     return new ol.style.Style({
@@ -10,10 +13,10 @@ const createStyle = (color, strokeColor, strokeWidth = 2) => {
         }),
         text: new ol.style.Text({
             font: '14px "Open Sans", "Arial Unicode MS", sans-serif',
-            fill: new ol.style.Fill({ color: '#000' }),
+            fill: new ol.style.Fill({ color: '#fff' }),
             stroke: new ol.style.Stroke({
-                color: '#fff',
-                width: 4
+                color: '#000',
+                width: 2
             }),
             overflow: true,
             offsetY: -15,
@@ -26,7 +29,7 @@ const createStyle = (color, strokeColor, strokeWidth = 2) => {
 };
 
 // Define styles with fixed widths
-const styles = {
+let styles = {
     academic: createStyle('rgba(0, 0, 255, 0.2)', 'rgba(0, 0, 255, 1)'),
     grass: createStyle('rgba(0, 255, 0, 0.2)', 'rgba(0, 255, 0, 1)'),
     hostel: createStyle('rgba(255, 165, 0, 0.2)', 'rgba(255, 165, 0, 1)'),
@@ -121,6 +124,125 @@ const styles = {
     })
 };
 
+let darkstyles = {
+    academic: createStyle('rgba(40, 60, 100, 0.15)', 'rgba(60, 90, 140, 0.9)'),
+    grass: createStyle('rgba(30, 60, 30, 0.1)', 'rgba(60, 100, 60, 0.8)'),
+    hostel: createStyle('rgba(100, 70, 40, 0.1)', 'rgba(160, 110, 70, 0.9)'),
+    mess: createStyle('rgba(100, 40, 40, 0.1)', 'rgba(160, 60, 60, 0.9)'),
+    parking: createStyle('rgba(100, 100, 100, 0.05)', 'rgba(150, 150, 150, 0.7)'),
+    sports: createStyle('rgba(80, 60, 120, 0.1)', 'rgba(130, 100, 180, 0.8)'),
+    shops: createStyle('rgba(120, 80, 30, 0.1)', 'rgba(180, 120, 60, 0.85)'),
+    temple: createStyle('rgba(90, 60, 40, 0.1)', 'rgba(150, 100, 70, 0.85)'),
+
+    walkways: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#6a4e3a',
+            width: 2
+        }),
+        text: new ol.style.Text({
+            font: '12px "Roboto", "Open Sans", "Arial", sans-serif',
+            fill: new ol.style.Fill({ color: '#ccc' }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.5)',
+                width: 3
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [4, 4, 4, 4],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
+        })
+    }),
+
+    circles: createStyle('rgba(120, 120, 120, 0.1)', 'rgba(170, 170, 170, 0.8)'),
+
+    roads_main: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#5a5a5a',
+            width: 3,
+            lineCap: 'round',
+            lineJoin: 'round'
+        }),
+        text: new ol.style.Text({
+            font: '12px "Roboto", "Open Sans", "Arial", sans-serif',
+            fill: new ol.style.Fill({ color: '#d0d0d0' }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.5)',
+                width: 3
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [4, 4, 4, 4],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
+        })
+    }),
+
+    roads_second: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#777',
+            width: 2,
+            lineCap: 'round',
+            lineJoin: 'round'
+        }),
+        text: new ol.style.Text({
+            font: '12px "Roboto", "Open Sans", "Arial", sans-serif',
+            fill: new ol.style.Fill({ color: '#c0c0c0' }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.5)',
+                width: 3
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [4, 4, 4, 4],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
+        })
+    }),
+
+    under_construction: new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 100, 0.05)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#ccc200',
+            width: 2,
+            lineDash: [10, 10]
+        }),
+        text: new ol.style.Text({
+            font: '12px "Roboto", "Open Sans", "Arial", sans-serif',
+            fill: new ol.style.Fill({ color: '#dcdcdc' }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 0, 0, 0.5)',
+                width: 3
+            }),
+            overflow: true,
+            offsetY: -10,
+            padding: [4, 4, 4, 4],
+            textAlign: 'center',
+            textBaseline: 'middle',
+            placement: 'line'
+        })
+    }),
+
+    tree: new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 5,
+            fill: new ol.style.Fill({
+                color: 'rgba(40, 90, 40, 0.8)'
+            })
+        })
+    })
+};
+
+
+
+
+
+
 // Function to create style with label
 function createLabeledStyle(feature, baseStyle) {
     const shops = feature.get('Shops');
@@ -172,7 +294,7 @@ const map = new ol.Map({
     view: new ol.View({
         center: [0, 0],
         zoom: 17,
-        minZoom: 16,
+        minZoom: 15, //change s/16/15, to fit whole map on page resolve
         maxZoom: 19,
         constrainRotation: false // Allow map rotation
     }),
@@ -217,9 +339,56 @@ function addGeoJSONLayer(url, style, id) {
     
     return vectorLayer;
 }
+//added darkmode
+//toggles css for bg and checks for global var
+//swaps styles, reintializes layerconfigs, removes all layers, regen all new layers
+function darkmode() {
+    document.getElementById("map").classList.toggle("darkmode");
+    document.getElementById("legendPanel").classList.toggle("darkmode2");
+    document.getElementById("searchPanel").classList.toggle("darkmode2");
+    
+    isDarkMode = !isDarkMode;
+    
+    let temp = styles;
+    styles = darkstyles;
+    darkstyles = temp;
+    
+    let layerConfigs = {
+        academic: { url: 'data/Academic_Blocks.geojson', style: styles.academic },
+        grass: { url: 'data/Grasscover.geojson', style: styles.grass },
+        hostel: { url: 'data/Hostels.geojson', style: styles.hostel },
+        mess: { url: 'data/Mess.geojson', style: styles.mess },
+        parking: { url: 'data/Parking.geojson', style: styles.parking },
+        sports: { url: 'data/Sports.geojson', style: styles.sports },
+        shops: { url: 'data/Shops.geojson', style: styles.shops },
+        temple: { url: 'data/temple.geojson', style: styles.temple },
+        tree: { url: 'data/Trees.geojson', style: styles.tree },
+        walkways: { url: 'data/walkways.geojson', style: styles.walkways },
+        circles: { url: 'data/circles.geojson', style: styles.circles },
+        roads_main: { url: 'data/roads_main.geojson', style: styles.roads_main },
+        roads_second: { url: 'data/roads_second.geojson', style: styles.roads_second },
+        under_construction: { url: 'data/Under_Construction.geojson', style: styles.under_construction }
+    };
+
+    map.getLayers().getArray().slice().forEach(function(layer) {
+        if (layer instanceof ol.layer.Vector) {
+            map.removeLayer(layer);
+        }
+    });
+
+    Object.entries(layerConfigs).forEach(([id, config]) => {
+        addGeoJSONLayer(config.url, config.style, id);
+    });
+    map.addLayer(userPositionLayer);
+    const icon = document.getElementById("toggle-icon");
+    const isDark = document.getElementById("darkToggle").checked;
+
+    icon.className = isDark ? "fa-regular fa-sun" : "fa-solid fa-moon";
+}
+
 
 // Add Layers
-const layerConfigs = {
+let layerConfigs = {
     academic: { url: 'data/Academic_Blocks.geojson', style: styles.academic },
     grass: { url: 'data/Grasscover.geojson', style: styles.grass },
     hostel: { url: 'data/Hostels.geojson', style: styles.hostel },
@@ -252,7 +421,7 @@ let userPositionLayer = new ol.layer.Vector({
                 color: 'rgb(188,20,20)'
             }),
             stroke: new ol.style.Stroke({
-                color: '#322d2d',
+                color: '#454544',
                 width: 5
             })
         })
@@ -315,17 +484,21 @@ function startPositionTracking() {
                 if (isPositionNearMapExtent(coordinates)) {
                     map.getView().animate({
                         center: coordinates,
-                        duration: 500
+                        duration: 0
                     });
                 } else {
                     // If user is far from map extent, show notification and disable following
                     // but still keep the map visible
                     showLocationWarning();
+                    
+                    
                     followUserPosition = false;
                     trackingButton.classList.remove('active');
                     
+                    
                     // Ensure map is still visible by fitting to features
                     fitMapToFeatures();
+
                 }
             }
         }
@@ -347,7 +520,7 @@ function startPositionTracking() {
 
 document.addEventListener("DOMContentLoaded", function () {
     // Your existing code here
-    startPositionTracking();  // Ensure this runs only after user interaction
+    //startPositionTracking();  // Ensure this runs only after user interaction
 });
 
 // Show warning when user is far from the mapped area
@@ -410,10 +583,11 @@ const trackingButton = document.getElementById('toggleTracking');
 trackingButton.addEventListener('click', () => {
     followUserPosition = !followUserPosition;
     trackingButton.classList.toggle('active');
-    
+
     if (followUserPosition && geolocation.getPosition()) {
         const coordinates = geolocation.getPosition();
         if (isPositionNearMapExtent(coordinates)) {
+            
             map.getView().animate({
                 center: coordinates,
                 duration: 500
@@ -422,16 +596,15 @@ trackingButton.addEventListener('click', () => {
             showLocationWarning();
             followUserPosition = false;
             trackingButton.classList.remove('active');
-            
             // Ensure map is still visible by fitting to features
-            fitMapToFeatures();
+            // fitMapToFeatures();
+
         }
     } else {
         // If tracking is disabled, ensure map is centered on features
         fitMapToFeatures();
     }
 });
-
 
 
 // Fit Map to Features
@@ -646,24 +819,17 @@ map.on('click', function(event) {
     }
 });
 
-// Hover Effect
-map.on('pointermove', function(event) {
-    const pixel = map.getEventPixel(event.originalEvent);
-    const hit = map.hasFeatureAtPixel(pixel);
-    map.getTarget().style.cursor = hit ? 'pointer' : '';
-});
-
 // Update Stats
-map.getView().on('change:resolution', function() {
-    currentZoom.textContent = `Zoom: ${Math.round(map.getView().getZoom())}`;
-});
+//map.getView().on('', function() {
+//    currentZoom.textContent = `Zoom: ${Math.round(map.getView().getZoom())}`;
+//});
 
 // Update Time
-function updateTime() {
-    currentTime.textContent = new Date().toLocaleTimeString();
-}
-setInterval(updateTime, 1000);
+// function updateTime() {
+//    currentTime.textContent = new Date().toLocaleTimeString();
+//}
+//setInterval(updateTime, 1000);
 
 // Initialize Map
 fitMapToFeatures();
-updateTime();
+startPositionTracking();
